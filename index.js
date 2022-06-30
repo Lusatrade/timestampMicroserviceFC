@@ -56,8 +56,28 @@ const parseDateTime = (d)=>{
   }
 }
 
-app.get('/api/:date_time',(req,res)=>{
-  const result = parseDateTime(req.params.date_time)
+app.get('/api',(req,res)=>{
+  const result = parseDateTime(null)
+  if(result.error){
+    res.status(400).json(result)
+  }else{
+    res.status(200).json(result)
+  }
+ 
+})
+
+app.get('/api/:date',(req,res)=>{
+  const result = parseDateTime(req.params.date)
+  if(result.error){
+    res.status(400).json(result)
+  }else{
+    res.status(200).json(result)
+  }
+ 
+})
+
+app.get('/api/:date',(req,res)=>{
+  const result = parseDateTime(req.params.date)
   if(result.error){
     res.status(400).json(result)
   }else{
