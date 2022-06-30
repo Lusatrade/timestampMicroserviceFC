@@ -30,9 +30,11 @@ app.get("/api/hello", function (req, res) {
 
 const parseDateTime = (d)=>{
   const strFormat = "ddd, DD MMM YYYY HH:mm:ss [UTC]"
- if(parseInt(d)>0)d=parseInt(d)
+  
+ if(!d.match(/[\-\/]/))d=parseInt(d)
   try {
     const dt = new Date(d)
+    console.log(dt);
     if(dt.getFullYear()==1970)throw new Error("Probable invalid date provided")
     if(dt == 'Invalid Date')throw new Error("Invalid date. Cannot resolve")
     const fmt = dateAndTime.format(dt,strFormat,true)
