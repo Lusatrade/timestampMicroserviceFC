@@ -28,30 +28,29 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-const parseDateTime = (dt)=>{
+const parseDateTime = (d)=>{
   const strFormat = "ddd, DD MMM YYYY HH:mm:ss [UTC]"
-  
+ if(parseInt(d)>0)d=parseInt(d)
   try {
-    const date = new Date(dt)
-    if(!date.getTime()||undefined ===date.getTime()){
-      throw new Error('Invalid date')
-    }
-    const fmt = dateAndTime.format(date,strFormat,true)
+    const dt = new Date(d)
+    if(dt.getFullYear()==1970)throw new Error("Probable invalid date provided")
+    if(dt == 'Invalid Date')throw new Error("Invalid date. Cannot resolve")
+    const fmt = dateAndTime.format(dt,strFormat,true)
+    
     return{
-      unix: date.getTime(),
+      unix: dt.getTime(),
       utc: fmt
     }
 
   } catch (error) {
-    return {error: "Invalid dateTime parameter",message:error}
+    return {error: "Invalid dateTime parameter",message:error.message}
   }
 }
-  parseDateTime('2015-12-32')
 
 app.get('/api/:date_time',(req,res)=>{
   const result = parseDateTime(req.params.date_time)
   if(result.error){
-    res.status(400).json({error:"Invalid request type"})
+    res.status(400).json(result)
   }else{
     res.status(200).json(result)
   }
