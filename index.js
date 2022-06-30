@@ -29,8 +29,15 @@ app.get("/api/hello", function (req, res) {
 });
 
 const parseDateTime = (d)=>{
-  const strFormat = "ddd, DD MMM YYYY HH:mm:ss [UTC]"
-  
+  const strFormat = "ddd, DD MMM YYYY HH:mm:ss [GMT]"
+  if(!d){
+    d = new Date()
+    return {
+      unix: d.getTime(),
+      utc: dateAndTime.format(d,strFormat,true)
+    }
+    
+  }
  if(!d.match(/[\-\/]/))d=parseInt(d)
   try {
     const dt = new Date(d)
@@ -45,7 +52,7 @@ const parseDateTime = (d)=>{
     }
 
   } catch (error) {
-    return {error: "Invalid dateTime parameter",message:error.message}
+    return {error: "Invalid Date"}
   }
 }
 
