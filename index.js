@@ -38,9 +38,14 @@ const parseDateTime = (d)=>{
     }
     
   }
- if(!d.match(/[\-\/]/))d=parseInt(d)
+ 
   try {
-    const dt = new Date(d)
+    let dt = new Date()
+    if(!d.match(/[a-z,\-]/i)){
+      dt.setTime(parseInt(d))
+    }else{
+      dt = new Date(d)
+    }
     console.log(dt);
     if(dt.getFullYear()==1970)throw new Error("Probable invalid date provided")
     if(dt == 'Invalid Date')throw new Error("Invalid date. Cannot resolve")
@@ -67,6 +72,7 @@ app.get('/api',(req,res)=>{
 })
 
 app.get('/api/:date',(req,res)=>{
+  console.log(req.params);
   const result = parseDateTime(req.params.date)
   if(result.error){
     res.status(400).json(result)
